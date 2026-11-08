@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/fawwazid/go-redis/compare/v1.0.1...v1.1.0) (2026-11-08)
+
+
+### Features
+
+* expose Redis retry and context timeout controls ([#8](https://github.com/fawwazid/go-redis/issues/8)) ([#9](https://github.com/fawwazid/go-redis/issues/9)) ([1511768](https://github.com/fawwazid/go-redis/commit/15117687fccd30f1fe89f69dee3d44d63f801a67))
+
 ## [1.0.1](https://github.com/fawwazid/go-redis/compare/v1.0.0...v1.0.1) (2026-11-08)
 
 
