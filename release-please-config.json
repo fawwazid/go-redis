@@ -17,6 +17,8 @@
     {"type": "ci", "section": "Continuous Integration", "hidden": true}
   ],
   "packages": {
-    ".": {}
+    ".": {
+      "initial-version": "1.0.0"
+    }
   }
 }
