@@ -3,6 +3,8 @@ package goredis
 import (
 	"errors"
 	"testing"
+
+	"github.com/redis/go-redis/v9"
 )
 
 func TestNewAcceptsStandaloneConfig(t *testing.T) {
@@ -30,6 +32,46 @@ func TestNewAcceptsSentinelConfig(t *testing.T) {
 
 	if client.Raw() == nil {
 		t.Fatal("Raw() returned a nil client")
+	}
+}
+
+// TestNewPassesRetryAndContextTimeoutSettings checks both client topologies retain safety-critical go-redis options.
+func TestNewPassesRetryAndContextTimeoutSettings(t *testing.T) {
+	tests := []struct {
+		name   string
+		config Config
+	}{
+		{
+			name: "standalone",
+			config: Config{
+				Mode: ModeStandalone, Addr: "localhost:6379", MaxRetries: -1, ContextTimeoutEnabled: true,
+			},
+		},
+		{
+			name: "sentinel",
+			config: Config{
+				Mode: ModeSentinel, MasterName: "mymaster", SentinelAddrs: []string{"sentinel-1:26379"},
+				MaxRetries: -1, ContextTimeoutEnabled: true,
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			client, err := New(tt.config)
+			if err != nil {
+				t.Fatalf("New() error = %v", err)
+			}
+			defer client.Close()
+			raw, ok := client.Raw().(*redis.Client)
+			if !ok {
+				t.Fatalf("Raw() type = %T, want *redis.Client", client.Raw())
+			}
+			options := raw.Options()
+			// go-redis normalizes -1 to zero internal retries; zero means no retry loop.
+			if options.MaxRetries != 0 || !options.ContextTimeoutEnabled {
+				t.Fatalf("options = {MaxRetries: %d, ContextTimeoutEnabled: %t}, want {0, true}", options.MaxRetries, options.ContextTimeoutEnabled)
+			}
+		})
 	}
 }
 
@@ -110,6 +152,10 @@ func TestNewRejectsInvalidConfig(t *testing.T) {
 				PoolSize:     2,
 				MinIdleConns: 3,
 			},
+		},
+		{
+			name: "retry count below disabled sentinel",
+			config: Config{Mode: ModeStandalone, Addr: "localhost:6379", MaxRetries: -2},
 		},
 		{
 			name: "negative timeout",

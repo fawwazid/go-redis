@@ -71,6 +71,12 @@ type Config struct {
 	DialTimeout    time.Duration
 	ReadTimeout    time.Duration
 	WriteTimeout   time.Duration
+
+	// MaxRetries sets the maximum retry attempts. -1 disables retries; zero uses the go-redis default.
+	MaxRetries int
+
+	// ContextTimeoutEnabled applies context deadlines to Redis socket read and write timeouts.
+	ContextTimeoutEnabled bool
 }
 
 // Client owns a go-redis client configured for standalone Redis or Sentinel.
@@ -113,6 +119,8 @@ func New(cfg Config) (*Client, error) {
 			DialTimeout:    cfg.DialTimeout,
 			ReadTimeout:    cfg.ReadTimeout,
 			WriteTimeout:   cfg.WriteTimeout,
+			MaxRetries:     cfg.MaxRetries,
+			ContextTimeoutEnabled: cfg.ContextTimeoutEnabled,
 		})
 	case ModeSentinel:
 		if cfg.DB != 0 {
@@ -146,6 +154,8 @@ func New(cfg Config) (*Client, error) {
 			DialTimeout:      cfg.DialTimeout,
 			ReadTimeout:      cfg.ReadTimeout,
 			WriteTimeout:     cfg.WriteTimeout,
+			MaxRetries:       cfg.MaxRetries,
+			ContextTimeoutEnabled: cfg.ContextTimeoutEnabled,
 		})
 	default:
 		return nil, invalidConfig("Mode must be ModeStandalone or ModeSentinel")
@@ -169,6 +179,9 @@ func validateCommon(cfg Config) error {
 	}
 	if cfg.DialTimeout < 0 || cfg.ReadTimeout < 0 || cfg.WriteTimeout < 0 {
 		return invalidConfig("timeouts cannot be negative")
+	}
+	if cfg.MaxRetries < -1 {
+		return invalidConfig("MaxRetries cannot be less than -1")
 	}
 	return nil
 }
