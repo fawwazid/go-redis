@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/fawwazid/go-redis/compare/v1.0.0...v1.0.1) (2026-11-08)
+
+
+### Documentation
+
+* document branch and pull request workflow ([1f23f2a](https://github.com/fawwazid/go-redis/commit/1f23f2abbe529ebee890c6a417b916e3768ac3d9))
+
 ## 1.0.0 (2026-11-08)
 
 
