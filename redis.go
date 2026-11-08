@@ -154,6 +154,8 @@ func New(cfg Config) (*Client, error) {
 			DialTimeout:      cfg.DialTimeout,
 			ReadTimeout:      cfg.ReadTimeout,
 			WriteTimeout:     cfg.WriteTimeout,
+			MaxRetries:       cfg.MaxRetries,
+			ContextTimeoutEnabled: cfg.ContextTimeoutEnabled,
 		})
 	default:
 		return nil, invalidConfig("Mode must be ModeStandalone or ModeSentinel")
