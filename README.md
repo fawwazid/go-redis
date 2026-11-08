@@ -58,9 +58,12 @@ certificate validation remains controlled by Go's TLS defaults unless the
 application explicitly changes them. Load credentials from a secret store or
 environment configuration instead of hard-coding them.
 
-`Config` also accepts pool sizes, `MaxActiveConns`, and dial/read/write
-timeouts. `MaxActiveConns` caps connections in the main pool; zero means no
-cap. The dedicated pipeline pool is separate and can add up to its configured
+`Config` also accepts pool sizes, `MaxActiveConns`, retry behavior, context
+deadline handling, and dial/read/write timeouts. `MaxRetries: -1` disables
+automatic retries; zero preserves the underlying go-redis default. Set
+`ContextTimeoutEnabled` to apply command context deadlines to socket I/O.
+`MaxActiveConns` caps connections in the main pool; zero means no cap. The
+dedicated pipeline pool is separate and can add up to its configured
 `PipelinePoolSize` connections. `PoolSize` is a base size, not a hard limit.
 `Client.Raw()` exposes the complete `redis.UniversalClient` API; `Ping` and
 `Close` are convenience methods.
