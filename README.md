@@ -5,7 +5,7 @@ Install with `go get github.com/fawwazid/go-redis`.
 A small configuration layer for Go Redis clients. It supports direct
 standalone connections and primary discovery with Redis Sentinel failover,
 using [`go-redis`](https://github.com/redis/go-redis) for the Redis protocol
-and complete command API. Requires Go 1.27.3.
+and complete command API. Requires Go 1.27.4.
 
 ## Standalone
 
