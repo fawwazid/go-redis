@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/fawwazid/go-redis/compare/v1.1.0...v1.1.1) (2026-11-15)
+
+
+### Bug Fixes
+
+* **security:** require patched Go toolchain ([#11](https://github.com/fawwazid/go-redis/issues/11)) ([#12](https://github.com/fawwazid/go-redis/issues/12)) ([6b4656c](https://github.com/fawwazid/go-redis/commit/6b4656cb2d35cdd2010197accc452bebd022e59f))
+
 ## [1.1.0](https://github.com/fawwazid/go-redis/compare/v1.0.1...v1.1.0) (2026-11-08)
 
 
